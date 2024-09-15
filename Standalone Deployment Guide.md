@@ -119,8 +119,7 @@ Two environment files are provided for you in the /usr/share/openstack-tripleo-h
 
 You can customize the all-in-one environment for development or testing. Include modified values for the parameters in either the standalone-tripleo.yaml or Standalone.yaml configuration files in a newly created yaml file in your home directory. Include this file in the openstack tripleo deploy command. 
 
-4.1. Generating YAML files for the all-in-one Red Hat OpenStack Platform (RHOSP) environment
-Copy link
+#### 4.1. Generating YAML files for the all-in-one Red Hat OpenStack Platform (RHOSP) environment
 
 To generate the containers-prepare-parameters.yaml and standalone_parameters.yaml files, complete the following steps:
 
@@ -137,7 +136,7 @@ Edit the containers-prepare-parameters.yaml file and include your Red Hat creden
         registry.redhat.io:
           <USERNAME>: "<PASSWORD>"
 
-3. Set the ContainerImageRegistryLogin parameter to true in the containers-prepare-parameters.yaml:
+#### 3. Set the ContainerImageRegistryLogin parameter to true in the containers-prepare-parameters.yaml:
 
     parameter_defaults:
       ContainerImagePrepare:
@@ -268,8 +267,7 @@ To run the Ansible playbooks, run the ansible-playbook command, and include the 
 
 Use the following examples to understand how to launch a compute instance post-deployment with various network configurations. 
 
-7.1. Example 1: Launching an instance with one NIC on the project and provider networks
-Copy link
+#### 7.1. Example 1: Launching an instance with one NIC on the project and provider networks
 
 Use this example to understand how to launch an instance with the private project network and the provider network after you deploy the all-in-one Red Hat OpenStack Platform environment. This example is based on a single NIC configuration and requires at least three IP addresses.
 Prerequisites
@@ -369,7 +367,7 @@ Test SSH:
 Replace FLOATING_IP with the address of the floating IP that you create in a previous step. 
 
 
-7.2. Example 2: Launching an instance with one NIC on the provider network
+#### 7.2. Example 2: Launching an instance with one NIC on the provider network
 
 
 Use this example to understand how to launch an instance with the provider network after you deploy the all-in-one Red Hat OpenStack Platform environment. This example is based on a single NIC configuration and requires at least four IP addresses.
