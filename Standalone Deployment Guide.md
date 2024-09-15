@@ -149,7 +149,7 @@ Edit the containers-prepare-parameters.yaml file and include your Red Hat creden
     
 If you want to use the all-in-one host as the container registry, omit this parameter and include --local-push-destination in the openstack tripleo container image prepare command. 
 
-4. Create the $HOME/standalone_parameters.yaml file and configure basic parameters for your all-in-one RHOSP environment, including network configuration and some deployment options. In this example, network interface eth1 is the interface on the management network that you use to deploy RHOSP. eth1 has the IP address 192.168.25.2:
+Create the $HOME/standalone_parameters.yaml file and configure basic parameters for your all-in-one RHOSP environment, including network configuration and some deployment options. In this example, network interface eth1 is the interface on the management network that you use to deploy RHOSP. eth1 has the IP address 192.168.25.2:
 
     [stack@all-in-one]$ export IP=192.168.25.2
     [stack@all-in-one]$ export VIP=192.168.25.3
@@ -197,3 +197,69 @@ If you want to use the all-in-one RHOSP installation in a virtual environment, y
 
 The Load-balancing service (octavia) does not require that you configure SSH. However, if you want SSH access to the load-balancing instances (amphorae), add the OctaviaAmphoraSshKeyFile parameter with a value of the absolute path to your public key file for the stack user: OctaviaAmphoraSshKeyFile: "/home/stack/.ssh/id_rsa.pub" 
 
+# Chapter 5. Deploying the all-in-one Red Hat OpenStack Platform environment
+
+ To deploy your all-in-one environment, complete the following steps:
+
+    Log in to registry.redhat.io with your Red Hat credentials:
+
+    [stack@all-in-one]$ sudo podman login registry.redhat.io
+
+    Export the environment variables that the deployment command uses. In this example, deploy the all-in-one environment with the eth1 interface that has the IP addresses 192.168.25.2 and 192.168.25.3 on the management network:
+
+    [stack@all-in-one]$ export IP=192.168.25.2
+    [stack@all-in-one]$ export VIP=192.168.25.3
+    [stack@all-in-one]$ export NETMASK=24
+    [stack@all-in-one]$ export INTERFACE=eth1
+
+    Set the hostname. If the node is using localhost.localdomain, the deployment will fail.
+
+    [stack@all-in-one]$ hostnamectl set-hostname all-in-one.example.net
+    [stack@all-in-one]$ hostnamectl set-hostname all-in-one.example.net --transient
+
+    Run the deployment command. Ensure that you include all .yaml files relevant to your environment:
+
+    [stack@all-in-one]$ sudo openstack tripleo deploy \
+      --templates \
+      --local-ip=$IP/$NETMASK \
+      --control-virtual-ip=$VIP \
+      -e /usr/share/openstack-tripleo-heat-templates/environments/standalone/standalone-tripleo.yaml \
+      -r /usr/share/openstack-tripleo-heat-templates/roles/Standalone.yaml \
+      -e $HOME/containers-prepare-parameters.yaml \
+      -e $HOME/standalone_parameters.yaml \
+      --output-dir $HOME \
+      --standalone
+
+After a successful deployment, you can use the clouds.yaml configuration file in the /home/$USER/.config/openstack directory to query and verify the OpenStack services:
+    
+    [stack@all-in-one]$ export OS_CLOUD=standalone
+    [stack@all-in-one]$ openstack endpoint list
+    
+To access the dashboard, go to to http://192.168.25.2/dashboard and use the default username admin and the password from the $HOME/config/openstack/clouds.yaml file:
+
+    [stack@all-in-one]$ cat $HOME/.config/openstack/clouds.yaml | grep password:
+
+# Chapter 6. Creating Ansible playbooks with the all-in-one Red Hat OpenStack Platform environment
+Copy link
+
+The deployment command applies Ansible playbooks to the environment automatically. However, you can modify the deployment command to generate Ansible playbooks without applying them to the deployment, and run the playbooks later.
+
+Include the --output-only option in the deploy command to generate the standalone-ansible-XXXXX directory. This directory contains a set of Ansible playbooks that you can run on other hosts.
+
+To generate the Ansible playbook directory, run the deploy command with the option --output-only:
+
+    [stack@all-in-one]$ sudo openstack tripleo deploy \
+      --templates \
+      --local-ip=$IP/$NETMASK \
+      -e /usr/share/openstack-tripleo-heat-templates/environments/standalone/standalone-tripleo.yaml \
+      -r /usr/share/openstack-tripleo-heat-templates/roles/Standalone.yaml \
+      -e $HOME/containers-prepare-parameters.yaml \
+      -e $HOME/standalone_parameters.yaml \
+      --output-dir $HOME \
+      --standalone \
+      --output-only
+
+To run the Ansible playbooks, run the ansible-playbook command, and include the inventory.yaml file and the deploy_steps_playbook.yaml file:
+
+    [stack@all-in-one]$ cd standalone-ansible-XXXXX
+    [stack@all-in-one]$ sudo ansible-playbook -i inventory.yaml deploy_steps_playbook.yaml
