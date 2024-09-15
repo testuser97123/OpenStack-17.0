@@ -149,7 +149,7 @@ Edit the containers-prepare-parameters.yaml file and include your Red Hat creden
     
 If you want to use the all-in-one host as the container registry, omit this parameter and include --local-push-destination in the openstack tripleo container image prepare command. 
 
-4.  Create the $HOME/standalone_parameters.yaml file and configure basic parameters for your all-in-one RHOSP environment, including network configuration and some deployment options. In this example, network interface eth1 is the interface on the management network that you use to deploy RHOSP. eth1 has the IP address 192.168.25.2:
+4. Create the $HOME/standalone_parameters.yaml file and configure basic parameters for your all-in-one RHOSP environment, including network configuration and some deployment options. In this example, network interface eth1 is the interface on the management network that you use to deploy RHOSP. eth1 has the IP address 192.168.25.2:
 
     [stack@all-in-one]$ export IP=192.168.25.2
     [stack@all-in-one]$ export VIP=192.168.25.3
