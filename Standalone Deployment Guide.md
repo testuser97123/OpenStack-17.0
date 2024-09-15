@@ -151,32 +151,32 @@ If you want to use the all-in-one host as the container registry, omit this para
 
 4.  Create the $HOME/standalone_parameters.yaml file and configure basic parameters for your all-in-one RHOSP environment, including network configuration and some deployment options. In this example, network interface eth1 is the interface on the management network that you use to deploy RHOSP. eth1 has the IP address 192.168.25.2:
 
-[stack@all-in-one]$ export IP=192.168.25.2
-[stack@all-in-one]$ export VIP=192.168.25.3
-[stack@all-in-one]$ export NETMASK=24
-[stack@all-in-one]$ export INTERFACE=eth1
-[stack@all-in-one]$ export DNS1=1.1.1.1
-[stack@all-in-one]$ export DNS2=8.8.8.8
-
-[stack@all-in-one]$ cat <<EOF > $HOME/standalone_parameters.yaml
-parameter_defaults:
-  CloudName: $IP
-  CloudDomain: localdomain
-  ControlPlaneStaticRoutes: []
-  Debug: true
-  DeploymentUser: $USER
-  KernelIpNonLocalBind: 1
-  DockerInsecureRegistryAddress:
-    - $IP:8787
-  NeutronPublicInterface: $INTERFACE
-  NeutronDnsDomain: localdomain
-  NeutronBridgeMappings: datacentre:br-ctlplane
-  NeutronPhysicalBridge: br-ctlplane
-  StandaloneEnableRoutedNetworks: false
-  StandaloneHomeDir: $HOME
-  StandaloneLocalMtu: 1500
-EOF
-
+    [stack@all-in-one]$ export IP=192.168.25.2
+    [stack@all-in-one]$ export VIP=192.168.25.3
+    [stack@all-in-one]$ export NETMASK=24
+    [stack@all-in-one]$ export INTERFACE=eth1
+    [stack@all-in-one]$ export DNS1=1.1.1.1
+    [stack@all-in-one]$ export DNS2=8.8.8.8
+    
+    [stack@all-in-one]$ cat <<EOF > $HOME/standalone_parameters.yaml
+    parameter_defaults:
+      CloudName: $IP
+      CloudDomain: localdomain
+      ControlPlaneStaticRoutes: []
+      Debug: true
+      DeploymentUser: $USER
+      KernelIpNonLocalBind: 1
+      DockerInsecureRegistryAddress:
+        - $IP:8787
+      NeutronPublicInterface: $INTERFACE
+      NeutronDnsDomain: localdomain
+      NeutronBridgeMappings: datacentre:br-ctlplane
+      NeutronPhysicalBridge: br-ctlplane
+      StandaloneEnableRoutedNetworks: false
+      StandaloneHomeDir: $HOME
+      StandaloneLocalMtu: 1500
+    EOF
+    
 If you use only a single network interface, you must define the default route:
     
     ControlPlaneStaticRoutes:
