@@ -47,39 +47,39 @@ To install, configure, and deploy a simple, single-node Red Hat OpenStack Platfo
 
  Before you can begin configuring, deploying, and testing your all-in-one environment, you must configure a non-root user and install the necessary packages and dependencies:
 
-1. Create a non-root user on the all-in-one host:
+Create a non-root user on the all-in-one host:
 
     [root@all-in-one]# useradd stack
 
-2. Set the password for the stack user:
+Set the password for the stack user:
 
     [root@all-in-one]# passwd stack
 
-3. Disable password requirements when using sudo as the stack user:
+Disable password requirements when using sudo as the stack user:
 
     [root@all-in-one]# echo "stack ALL=(root) NOPASSWD:ALL" | tee -a /etc/sudoers.d/stack
     [root@all-in-one]# chmod 0440 /etc/sudoers.d/stack
 
-4. Log in as the non-root user on the all-in-one host:
+Log in as the non-root user on the all-in-one host:
 
     [stack@all-in-one]$ ssh stack@<all-in-one>
 
-5. Register the machine with Red Hat Subscription Manager. Enter your Red Hat subscription credentials at the prompt:
+Register the machine with Red Hat Subscription Manager. Enter your Red Hat subscription credentials at the prompt:
 
     [stack@all-in-one]$ sudo subscription-manager register
 
-6. Attach your Red Hat subscription to the entitlement server:
+Attach your Red Hat subscription to the entitlement server:
 
     [stack@all-in-one]$ sudo subscription-manager attach --auto
 
 [!NOTE] 
 > The --auto option might not subscribe you to the correct subscription pool. Ensure that you subscribe to the correct pool, otherwise you might not be able to enable all of the repositories necessary for this installation. Use the subscription-manager list --all --available command to identify the correct pool ID. 
 
-7. Lock the undercloud to Red Hat Enterprise Linux 9.0:
+Lock the undercloud to Red Hat Enterprise Linux 9.0:
 
     [stack@all-in-one]$ sudo subscription-manager release --set=9.0
     
-8. Run the following commands to install dnf-utils, disable all default repositories, and then enable the necessary repositories:
+Run the following commands to install dnf-utils, disable all default repositories, and then enable the necessary repositories:
 
     [stack@all-in-one]$ sudo dnf install -y dnf-utils
     [stack@all-in-one]$ sudo subscription-manager repos --disable=*
@@ -94,14 +94,14 @@ To install, configure, and deploy a simple, single-node Red Hat OpenStack Platfo
 > The all-in-one environment is a Technology Preview feature in Red Hat OpenStack Platform 17.0.
 
 
-1. Update the base operating system and reboot the system:
+Update the base operating system and reboot the system:
 
     [stack@all-in-one]$ sudo dnf update
     [stack@all-in-one]$ sudo reboot
 
-2. Log back in to the host after the reboot.
+Log back in to the host after the reboot.
 
-3. Install the TripleO command line interface (CLI):
+Install the TripleO command line interface (CLI):
 
     [stack@all-in-one]$ sudo dnf install -y python3-tripleoclient
 
